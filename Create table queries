@@ -1,0 +1,225 @@
+-- Table Creaction queries:
+
+    -- users:
+-- @block
+        CREATE TABLE users
+        (
+            id  VARCHAR(100) NOT NULL PRIMARY KEY,
+            fullname VARCHAR(100),
+            email VARCHAR(100) UNIQUE
+        );
+
+    -- services:
+    
+-- @block
+        CREATE TABLE services
+        (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100),
+            description TEXT,
+            duration INT,
+            price DECIMAL(10, 2),
+            img_url TEXT,
+            owner_id VARCHAR(100) NOT NULL,
+
+            FOREIGN KEY (owner_id) REFERENCES users(id)
+        );
+-- @block
+    -- workWeek:
+        -- CREATE TABLE workWeek
+        -- (
+        --     id INT AUTO_INCREMENT PRIMARY KEY,
+
+        --     sun_start  TIME SET DEFAULT 09:00,
+        --     sun_end TIME SET DEFAULT 17:00,
+        --     mon_start TIME SET DEFAULT 09:00,
+        --     mon_end TIME SET DEFAULT 17:00,
+        --     tue_start TIME SET DEFAULT 09:00,
+        --     tue_end TIME SET DEFAULT 17:00,
+        --     wed_start TIME SET DEFAULT 09:00,
+        --     wed_end TIME SET DEFAULT 17:00,
+        --     thu_start TIME SET DEFAULT 09:00,
+        --     thu_end TIME SET DEFAULT 17:00,
+        --     fri_start TIME SET DEFAULT 09:00,
+        --     fri_end TIME SET DEFAULT 17:00,
+        --     sat_start TIME SET DEFAULT 09:00,
+        --     sat_end TIME SET DEFAULT 17:00,
+            
+        --     owner_id INT NOT NULL,
+
+        --     FOREIGN KEY (owner_id) REFERENCES users(id)
+
+
+        -- );
+-- @block
+            CREATE TABLE workWeek (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                owner_id VARCHAR(100) NOT NULL,
+                FOREIGN KEY (owner_id) REFERENCES users(id)
+            );
+-- @block
+            CREATE TABLE dailySchedule (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                day_of_week VARCHAR(10),
+                start_time TIME,
+                end_time TIME,
+                is_workDay BOOLEAN,
+                workweek_id INT NOT NULL,
+                time_slot_duration TIME,
+                FOREIGN KEY (workweek_id) REFERENCES workWeek(id)
+            );
+
+    -- clients:
+-- @block
+        CREATE TABLE clients
+        (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            Name VARCHAR(100),
+            phone VARCHAR(100),
+            email VARCHAR(100),
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+            owner_id VARCHAR(100) NOT NULL,
+
+            FOREIGN KEY (owner_id) REFERENCES users(id)
+        );
+
+    -- Appointments:
+    -- @block
+        CREATE TABLE appointments
+        (
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            start TIME,
+            end TIME,
+            date DATE,
+            service_id INT,
+            note TEXT,
+            owner_id VARCHAR(100) NOT NULL,
+            client_id INT NOT NULL,
+
+            FOREIGN KEY (owner_id) REFERENCES users(id),
+            FOREIGN KEY (service_id) REFERENCES services(id),
+            FOREIGN KEY (client_id) REFERENCES clients(id)
+        );
+    -- @block
+        CREATE TABLE business
+        (
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100),
+            address VARCHAR(100),
+            phone VARCHAR(100),
+            owner_id VARCHAR(100) NOT NULL,
+
+            FOREIGN KEY (owner_id) REFERENCES users(id)
+
+        );
+-- @block
+/////////////////////////////////////////////////////////////////////////////////////////
+
+CRUD
+
+    users:
+        create new user:
+
+            INSERT INTO users (id, fullname, email) VALUES (1, 'Eytan Krief', 'eytankr@gmail.com'); 
+
+    services:
+        post new service:
+
+            INSERT INTO services (name, description, duration, price, owner_id) 
+                        VALUES ('manicure', 'russian method', 90, 180.00, 1);
+        
+        Get all Services:
+            
+            SELECT * FROM services;
+
+
+        get single service:
+
+            SELECT * FROM services WHERE id=1;
+
+        edit service
+
+            UPDATE services SET duration=75 WHERE id=1;
+
+        delete service
+
+            DELETE FROM services WHERE id=1;
+
+    workWeek:
+
+
+        create init dayly_schedule for each new user:
+
+                for loop 0-6:
+
+                INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id)
+                VALUES
+                    (i, '09:00', '17:00', [workweek_id]); -- Replace [workweek_id] with the actual workweek_id
+                    
+
+        get workweek
+
+            SELECT id FROM workWeek WHERE owner_id=[owner_id];
+            SELECT * FROM dailySchedule WHERE workWeek_id=[workWeek_id];
+
+
+        edit workweek
+            workWeek_id = SELECT id FROM workWeek WHERE owner_id=1;
+                          UPDATE dailySchedule SET start_time=10:00 WHERE workWeek_id=[workWeek_id] AND day_of_week=0; --for Sunday
+            
+        
+    clients:
+        post new client
+            INSERT INTO clients (name, phone, email, owner_id) 
+                          VALUES ('Lital Cohen', '050-865-9933', 'litalcohen@gmail.com', 1);
+        
+        edit client
+            UPDATE clients SET phone='050-332-3344' Where id=2;
+        
+        delete client
+            DELETE FROM clients WHERE id=2;
+            
+    
+    Appointments:
+
+        post new appointment:
+            INSERT INTO appointments (owner_id, client_id, start, end, service_id, note);
+                          VALUES (1, 1, '10:30', '12:00', 1, '');
+            
+        get single appointment:
+            SELECT * FROM appointments WHERE id=1;
+        
+        Get all appointments for user:
+            SELECT * FROM appointments WHERE owner_id=1;
+        
+        edit appointment:
+            UPDATE appointments SET start='11:00', end='12:30' WHERE id=1;
+        
+        delete appointment:
+            DELETE FROM appointments WHERE id=1;
+    
+
+
+
+                            -- INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id)
+                -- VALUES
+                --     (0, '09:00', '17:00', [workweek_id]);
+                -- INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id)
+                -- VALUES
+                --     (1, '09:00', '17:00', [workweek_id]);
+                -- INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id)
+                -- VALUES
+                --     (2, '09:00', '17:00', [workweek_id]);
+                -- INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id)
+                -- VALUES
+                --     (3, '09:00', '17:00', [workweek_id]);
+                -- INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id)
+                -- VALUES
+                --     (4, '09:00', '17:00', [workweek_id]);
+                -- INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id)
+                -- VALUES
+                --     (5, '09:00', '17:00', [workweek_id]);
+                -- INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id)
+                -- VALUES
+                --     (6, '09:00', '17:00', [workweek_id]);
