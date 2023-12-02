@@ -534,8 +534,8 @@ app.post(
           const dailySchedule = {
             start_time: weekDay.start_time,
             end_time: weekDay.endTime,
-            isWorkDay: weekDay.isWorkDay,
-            timeSlotDuration: weekDay.timeSlotDuration,
+            is_work_day: weekDay.isWorkDay,
+            time_slot_duration: weekDay.timeSlotDuration,
             dailySchedule_id: weekDay.id,
           };
 

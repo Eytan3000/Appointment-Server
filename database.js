@@ -150,11 +150,11 @@ export async function updateDailySchedule(dailySchedule) {
   const {
     start_time,
     end_time,
-    isWorkDay,
-    timeSlotDuration,
+    is_work_day,
+    time_slot_duration,
     dailySchedule_id,
   } = dailySchedule;
-  
+
   const UPDATE_DAILYSCHEDULE = `UPDATE dailySchedule
   SET
     start_time = ?,
@@ -166,7 +166,7 @@ export async function updateDailySchedule(dailySchedule) {
   return poolQuery(
     UPDATE_DAILYSCHEDULE,
 
-    [start_time, end_time, isWorkDay, timeSlotDuration, dailySchedule_id]
+    [start_time, end_time, is_work_day, time_slot_duration, dailySchedule_id]
   );
 }
 
