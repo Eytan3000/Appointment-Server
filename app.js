@@ -580,8 +580,13 @@ app.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
       }
-
-      const result = await createClient(name, phone, email, owner_id);
+      const client = {
+        name,
+        phone,
+        email,
+        owner_id,
+      };
+      const result = await createClient(client);
 
       if (result.affectedRows === 1) {
         res.status(201).json(result.insertId);

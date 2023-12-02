@@ -173,7 +173,8 @@ export async function updateDailySchedule(dailySchedule) {
 // --Clients--
 
 // Create new client:
-export async function createClient(name, phone, email, owner_id) {
+export async function createClient(client) {
+  const {name, phone, email, owner_id} =client;
   const INSERT_CLIENT = `INSERT INTO clients (name, phone, email, owner_id) 
   VALUES (?, ?, ?, ?);`;
   return poolQuery(INSERT_CLIENT, [name, phone, email, owner_id]);
