@@ -87,8 +87,12 @@ app.post(
         // return res.status(400).send('eytan4000');
         return res.status(400).send(errors.array()[0].msg);
       }
-
-      const result = await createUser(id, fullname, email);
+      const user = {
+        id,
+        fullname,
+        email,
+      };
+      const result = await createUser(user);
 
       if (result.affectedRows === 1) {
         res.status(201).send('User created successfully');
@@ -232,7 +236,6 @@ app.post(
 
 app.get('/services/read-all-services/:owner_id', async (req, res) => {
   console.log('Read all services');
-  // await wait(1000);
   try {
     const owner_id = req.params.owner_id;
 
@@ -253,7 +256,6 @@ app.get('/services/read-all-services/:owner_id', async (req, res) => {
 
 app.get('/services/read-single-service/:service_id', async (req, res) => {
   console.log('Read single service');
-  await wait(1000);
   try {
     const service_id = req.params.service_id;
 
@@ -278,10 +280,6 @@ app.post(
     check('service_id').notEmpty().withMessage('Service id cannot be empty'),
   ],
   async (req, res) => {
-    console.log('update service');
-
-    await wait(1000);
-
     try {
       const {
         name = null,
@@ -385,7 +383,6 @@ app.post(
   '/dailySchedule/create-7-daily-schedules',
   [check('workweek_id').notEmpty().withMessage('workweek_id cannot be empty')],
   async (req, res) => {
-    await wait(1000);
     try {
       const { weekScheduleObj } = req.body;
       const { workweek_id } = weekScheduleObj;
@@ -408,7 +405,7 @@ app.post(
             day: weekDay.name,
             startTime: weekDay.startTime,
             endTime: weekDay.endTime,
-            workweek_id,
+            workweekId:workweek_id,
             isWorkDay: weekDay.isWorkDay,
             timeSlotDuration: weekDay.timeSlotDuration,
           };
@@ -461,7 +458,6 @@ app.post(
 
 // Read workWeek_id based on owner_id
 app.get('/workweek/read-workweek-id/:owner_id', async (req, res) => {
-  // await wait(1e3);
   try {
     const { owner_id } = req.params;
     // Validate the request data
@@ -568,7 +564,6 @@ app.post(
     check('owner_id').notEmpty().withMessage('Owner id cannot be empty'),
   ],
   async (req, res) => {
-    await wait(2000);
     try {
       const { name, phone, email, owner_id } = req.body;
 
@@ -605,7 +600,6 @@ app.post(
   '/clients/update-client',
   [check('client_id').notEmpty().withMessage('Client id cannot be empty')],
   async (req, res) => {
-    await wait(1000);
     try {
       const { name, phone, email, client_id } = req.body;
 
@@ -615,8 +609,8 @@ app.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
       }
-
-      const result = await updateClient(name, phone, email, client_id);
+      const client = { name, phone, email, client_id };
+      const result = await updateClient(client);
 
       if (result.affectedRows === 1) {
         res.status(201).send('Client updated successfully');
@@ -656,7 +650,6 @@ app.delete('/clients/delete-client/:client_id', async (req, res) => {
 
 // Read all owner's clients
 app.get('/clients/get-all-clients/:owner_id', async (req, res) => {
-  // await wait(1000);
   try {
     const { owner_id } = req.params;
 
@@ -677,7 +670,6 @@ app.get('/clients/get-all-clients/:owner_id', async (req, res) => {
 
 // Read single client by client_id
 app.get('/clients/get-client/:client_id', async (req, res) => {
-  await wait(1000);
   try {
     const { client_id } = req.params;
 
@@ -698,9 +690,7 @@ app.get('/clients/get-client/:client_id', async (req, res) => {
 
 // Read single client for owner by phone
 app.get('/clients/get-client-exists-by-phone/', async (req, res) => {
-  // await wait(1000);
   try {
-    // const { phone } = req.params;
 
     const phone = req.query.phone;
     const owner_id = req.query.owner_id;
@@ -722,7 +712,6 @@ app.get('/clients/get-client-exists-by-phone/', async (req, res) => {
 
 // Read clientId by Phone
 app.get('/clients/get-client-id-by-phone/', async (req, res) => {
-  // await wait(1000);
 
   try {
     // const { phone } = req.params;
@@ -754,7 +743,6 @@ app.post(
   [check('client_id').notEmpty().withMessage('Client id cannot be empty')],
   [check('service_id').notEmpty().withMessage('Service id cannot be empty')],
   async (req, res) => {
-    await wait(1000);
     try {
       const { owner_id, client_id, start, end, date, service_id, note } =
         req.body;
@@ -765,16 +753,16 @@ app.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
       }
-
-      const result = await createAppointment(
+      const appointment = {
         owner_id,
         client_id,
         start,
         end,
         date,
         service_id,
-        note
-      );
+        note,
+      };
+      const result = await createAppointment(appointment);
       // console.log(result.insertId);
 
       if (result.affectedRows === 1) {
@@ -947,7 +935,6 @@ app.post(
       .withMessage('Appointment id cannot be empty'),
   ],
   async (req, res) => {
-    await wait(1000);
     try {
       const { start, end, serviceId, note, date, appointment_id } = req.body;
 
@@ -957,15 +944,9 @@ app.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
       }
+      const appointment = { start, end, serviceId, note, date, appointment_id };
 
-      const result = await updateAppointment(
-        start,
-        end,
-        serviceId,
-        note,
-        date,
-        appointment_id
-      );
+      const result = await updateAppointment(appointment);
 
       if (result.affectedRows === 1) {
         res.status(201).send('Appointment updated successfully');
@@ -1011,7 +992,6 @@ app.post(
     check('owner_id').notEmpty().withMessage('owner_id cannot be empty'),
   ],
   async (req, res) => {
-    // await wait(1000);
 
     try {
       const { start, end, date, owner_id } = req.body;
@@ -1048,7 +1028,6 @@ app.post(
   '/business/create-business',
   [check('owner_id').notEmpty().withMessage('Owner id cannot be empty')],
   async (req, res) => {
-    await wait(1000);
     try {
       const { owner_id, name, address, phone } = req.body;
 
@@ -1058,8 +1037,14 @@ app.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
       }
+      const businessDetails = {
+        owner_id,
+        name,
+        address,
+        phone,
+      };
 
-      const result = await createBusiness(owner_id, name, address, phone);
+      const result = await createBusiness(businessDetails);
 
       if (result.affectedRows === 1) {
         res.status(201).json(result.insertId);
@@ -1087,8 +1072,8 @@ app.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
       }
-
-      const result = await updateBusiness(name, address, phone, owner_id);
+      const businesDetails = { name, address, phone, owner_id };
+      const result = await updateBusiness(businesDetails);
 
       if (result.affectedRows === 1) {
         res.status(201).send('Business updated successfully');
@@ -1103,7 +1088,6 @@ app.post(
 );
 // Read single appointment:
 app.get('/business/get-business/:owner_id', async (req, res) => {
-  await wait(1000);
 
   try {
     const { owner_id } = req.params;
@@ -1152,7 +1136,6 @@ app.post(
   '/send-message/client-new-appointment',
   // [check('owner_id').notEmpty().withMessage('Owner id cannot be empty')],
   async (req, res) => {
-    await wait(1000);
     try {
       const {
         Clientname,

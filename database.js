@@ -18,7 +18,8 @@ async function poolQuery(sql, argumentsArr) {
 
 //-- Users --
 //Create new user
-export async function createUser(id, fullname, email) {
+export async function createUser(user) {
+  const {id, fullname, email} = user;
   return poolQuery(`INSERT INTO users (id, fullname, email) VALUES (?, ?, ?)`, [
     id,
     fullname,
@@ -117,7 +118,7 @@ export async function createWorkWeek(owner_id) {
 
 // Create new dailySchedule
 export async function createDailySchedule(dailySchedule) {
-  const { day, startTime, endTime, workweek_id, isWorkDay, timeSlotDuration } =
+  const { day, startTime, endTime, workweekId, isWorkDay, timeSlotDuration } =
     dailySchedule;
 
   const INSERT_DAILYSCHEDULE = `INSERT INTO dailySchedule (day_of_week, start_time, end_time, workweek_id, is_workDay, time_slot_duration)
@@ -127,7 +128,7 @@ export async function createDailySchedule(dailySchedule) {
     day,
     startTime,
     endTime,
-    workweek_id,
+    workweekId,
     isWorkDay,
     timeSlotDuration,
   ]);
@@ -174,14 +175,15 @@ export async function updateDailySchedule(dailySchedule) {
 
 // Create new client:
 export async function createClient(client) {
-  const {name, phone, email, owner_id} =client;
+  const { name, phone, email, owner_id } = client;
   const INSERT_CLIENT = `INSERT INTO clients (name, phone, email, owner_id) 
   VALUES (?, ?, ?, ?);`;
   return poolQuery(INSERT_CLIENT, [name, phone, email, owner_id]);
 }
 
 // Update client by client_id:
-export async function updateClient(name, phone, email, client_id) {
+export async function updateClient(client) {
+  const {name, phone, email, client_id} = client;
   const UPDATE_CLIENT = `UPDATE clients
   SET
     Name = CASE WHEN ? IS NOT NULL THEN ? ELSE Name END,
@@ -233,15 +235,9 @@ export async function getClientIdByPhone(phone, owner_id) {
 //--Appointments
 
 // Create new appointment:
-export async function createAppointment(
-  owner_id,
-  client_id,
-  start,
-  end,
-  date,
-  service_id,
-  note
-) {
+export async function createAppointment(appointment) {
+  const { owner_id, client_id, start, end, date, service_id, note } =
+    appointment;
   const INSERT_APPOINTMENT = `INSERT INTO appointments (owner_id, client_id, start, end,date, service_id, note) 
   VALUES (?,?,?,?,?,?,?);`;
 
@@ -335,14 +331,8 @@ export async function readAllAppointmentsAtDate(date) {
 }
 
 // Update appointment:
-export async function updateAppointment(
-  start,
-  end,
-  service_id,
-  note,
-  date,
-  appointment_id
-) {
+export async function updateAppointment(appointment) {
+  const { start, end, service_id, note, date, appointment_id } = appointment;
   const QUERY = `UPDATE appointments
   SET
     start = CASE WHEN ? IS NOT NULL THEN ? ELSE start END,
@@ -374,7 +364,9 @@ export async function deleteAppointment(appointment_id) {
 
 // -- business --
 // Create new business:
-export async function createBusiness(owner_id, name, address, phone) {
+export async function createBusiness(businessDetails) {
+  const {owner_id, name, address, phone} = businessDetails;
+
   const QUERY = `INSERT INTO business (owner_id, name, address, phone) 
   VALUES (?,?,?,?);`;
   return poolQuery(QUERY, [owner_id, name, address, phone]);
@@ -387,7 +379,8 @@ export async function readBusiness(owner_id) {
 }
 
 // Update business:
-export async function updateBusiness(name, address, phone, owner_id) {
+export async function updateBusiness(businessDetails) {
+  const {name, address, phone, owner_id}=businessDetails; 
   const QUERY = `UPDATE business
   SET
   name = ?,
