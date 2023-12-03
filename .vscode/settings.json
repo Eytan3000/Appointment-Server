@@ -26,6 +26,20 @@
             "database": "appointments",
             "username": "root",
             "password": "Eytan1105!"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "viaduct.proxy.rlwy.net",
+            "port": 53842,
+            "driver": "MySQL",
+            "name": "railway_appointments",
+            "database": "railway",
+            "username": "root",
+            "password": "D5-fDcfDegEc1Cg4461GD26h52HGFe4G"
         }
     ]
 }
