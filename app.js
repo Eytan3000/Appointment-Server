@@ -55,10 +55,13 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'https://planifyapp.netlify.app',
+  // origin: 'https://planifyapp.netlify.app',
+  origin: '*',
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
+
+
 
 const port = process.env.PORT || 8090;
 const cronInterval = '0 19 * * *';

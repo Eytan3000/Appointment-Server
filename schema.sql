@@ -1,7 +1,7 @@
 Show databases;
 -- @block
-use appointments;
--- use bookShop;
+-- use appointments;
+use railway;
 -- @block
 show tables;
 
@@ -102,7 +102,7 @@ Desc appointments;
     -- users:
         -- create new user:
 -- @block
-            INSERT INTO users (id, fullname, email) VALUES (1, 'Eytan Krief', 'eytankr@gmail.com'); 
+            INSERT INTO users (id, fullname, email) VALUES (1, 'Eytan Krief', 'eytankr@gmail.com');
 
     -- services:
         -- post new service:
