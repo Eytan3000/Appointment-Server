@@ -54,12 +54,13 @@ import { eytan, sendReminderCron } from './cronFunctions.js';
 const app = express();
 app.use(express.json());
 
-const corsOptions = {
-  // origin: 'https://planifyapp.netlify.app',
-  origin: '*',
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   // origin: 'https://planifyapp.netlify.app',
+//   origin: '*',
+//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+// app.use(cors(corsOptions));
+app.use(cors());
 
 
 
