@@ -76,14 +76,8 @@ const cronInterval = '0 19 * * *';
 // TEST
 app.get('/test', async (req, res) => {
   try {
-
-    if (result.affectedRows === 1) {
       res.status(201).send('Test successful');
       console.log('Test successful console log');
-    } else {
-      res.status(500).send('Test unsuccessful :(');
-      console.log('Test unsuccessful console log');
-    }
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error test');
