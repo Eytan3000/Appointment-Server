@@ -53,7 +53,13 @@ import { eytan, sendReminderCron } from './cronFunctions.js';
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+  origin: 'https://planifyapp.netlify.app/',
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions));
+
 const port = process.env.PORT || 8090;
 const cronInterval = '0 19 * * *';
 
