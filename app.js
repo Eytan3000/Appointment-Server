@@ -67,11 +67,11 @@ app.use(cors());
 // const port = process.env.PORT || 3000;
 const cronInterval = '0 19 * * *';
 
-function wait(time) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time);
-  });
-}
+// function wait(time) {
+//   return new Promise((resolve) => {
+//     setTimeout(resolve, time);
+//   });
+// }
 
 // TEST
 app.get('/test', async (req, res) => {
@@ -1236,6 +1236,6 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-app.listen(process.env.PORT || 8090, "0.0.0.0" ,() => {
+app.listen(process.env.PORT || 8090, '0.0.0.0' ,() => {
   console.log('server is running on port ' + port);
 });
