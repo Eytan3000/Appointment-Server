@@ -49,7 +49,7 @@ import {
 
 import twilio from 'twilio';
 import cron from 'node-cron';
-import { eytan, sendReminderCron } from './cronFunctions.js';
+import { sendReminderCron } from './cronFunctions.js';
 
 const app = express();
 app.use(express.json());
