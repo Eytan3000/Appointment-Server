@@ -68,22 +68,6 @@ app.use(cors(corsOptions));
 const port = process.env.PORT || 3000;
 const cronInterval = '0 19 * * *';
 
-// function wait(time) {
-//   return new Promise((resolve) => {
-//     setTimeout(resolve, time);
-//   });
-// }
-
-// TEST
-app.get('/test', async (req, res) => {
-  try {
-      res.status(201).send('Test successful');
-      console.log('Test successful console log');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error test');
-  }
-});
 
 //-- Users --
 //Create new user
@@ -171,6 +155,12 @@ app.post(
     try {
       const { id, fullname, email } = req.body;
 
+      console.log('id ', id);
+      console.log('fullname ', fullname);
+      console.log('email ', email);
+
+
+
       // Validate the request data
       const errors = validationResult(req);
 
@@ -179,8 +169,9 @@ app.post(
         // return res.status(400).send('eytan4000');
         return res.status(400).send(errors.array()[0].msg);
       }
-
-      const result = await createUser(id, fullname, email);
+      
+      const googleUser={id, fullname, email}
+      const result = await createUser(googleUser);
 
       if (result.affectedRows === 1) {
         res.status(201).send('User created successfully');
@@ -1052,7 +1043,7 @@ app.post(
   async (req, res) => {
     try {
       const { owner_id, name, address, phone } = req.body;
-
+      
       // Validate the request data
       const errors = validationResult(req);
 

@@ -8,7 +8,7 @@ show tables;
 
 
 -- @block
-Select * FROM users;
+Select * FROM users;  
 -- @block
 Select * FROM services;
 -- @block
@@ -42,7 +42,7 @@ INSERT INTO appointments (owner_id, client_id, start, end,date, service_id, note
 
 
 -- @block
-Select fullname FROM users WHERE id='KJUrnSsrFwRdNNrk896c8GFr0F32';
+Select fullname FROM users WHERE id='nbl4kT3L2pNLEcZ1W4zQAzfcUsA3';
 
 -- @block
 DROP TABLE dailySchedule;
@@ -54,13 +54,14 @@ DELETE FROM users;
 DELETE FROM services;
 -- @block
 DELETE FROM workWeek;
--- DESC workWeek;
 -- @block
 DELETE FROM dailySchedule;
 -- @block
 DELETE FROM clients;
 -- @block
 DELETE FROM appointments;
+-- @block
+DELETE FROM business;
 
 -- @block
 
