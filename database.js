@@ -2,25 +2,26 @@ import mysql from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// const pool = mysql
-//   .createPool({
-//     host: process.env.MYSQL_HOST,
-//     user: process.env.MYSQL_USER,
-//     password: process.env.MYSQL_PASSWORD,
-//     database: process.env.MYSQL_DATABASE,
-//   })
-//   .promise();
-
-
-  const pool = mysql
+const pool = mysql
   .createPool({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT,
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
   })
   .promise();
+
+
+// //Real server:
+//   const pool = mysql
+//   .createPool({
+//   host: process.env.MYSQLHOST,
+//   user: process.env.MYSQL_USER,
+//   password: process.env.MYSQLPASSWORD,
+//   database: process.env.MYSQLDATABASE,
+//   port: process.env.MYSQLPORT,
+//   })
+//   .promise();
 
 async function poolQuery(sql, argumentsArr) {
   const [rows] = await pool.query(sql, argumentsArr);

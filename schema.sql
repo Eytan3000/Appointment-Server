@@ -8,7 +8,7 @@ show tables;
 
 
 -- @block
-Select * FROM users;  
+Select * FROM users;   
 -- @block
 Select * FROM services;
 -- @block
@@ -27,10 +27,10 @@ Select * FROM business;
 -- @block
 -- Delete  FROM clients where id=44;
 -- Delete FROM appointments where client_id=44;
-Delete FROM appointments where id=104;
+Delete FROM users where email='eytankrief@gmail.com';
 -- @block
 UPDATE users
-SET id = 'dsahjkhdfdlffjf4'
+SET id = 'dsahjkhdfdlf33fjf4'
 WHERE id = 'temp';
 
 

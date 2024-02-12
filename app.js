@@ -218,9 +218,9 @@ app.post(
   ],
   async (req, res) => {
     try {
-      const { name, description, duration, price, owner_id, img_url } =
+      const { name, description, duration, price, owner_id, img_url,token } =
         req.body;
-
+        
       // Validate the request data
       const errors = validationResult(req);
 
@@ -1214,6 +1214,26 @@ cron.schedule(
   }
 );
 
+//------------------------------------------
+// middleware:
+// async function authenticateFirebaseToken(req, res, next) {
+//   // get token
+//   const authHeader = req.headers['authorization'];
+
+//   const token = authHeader && authHeader.split(' ')[1];
+
+//   if (token === null) return res.sendStatus(401);
+
+//   // we have valid token, verify that token:
+//   try {
+//     const decodeValue = await admin.auth().verifyIdToken(token);
+
+//     if (decodeValue) return next();
+//     return res.json({ message: 'unauthorized' });
+//   } catch (e) {
+//     return res.json({ message: 'internal error' });
+//   }
+// }
 //------------------------------------------
 app.use((err, req, res, next) => {
   console.error(err.stack);
