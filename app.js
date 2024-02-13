@@ -50,6 +50,7 @@ import {
 import twilio from 'twilio';
 import cron from 'node-cron';
 import { sendReminderCron } from './cronFunctions.js';
+import admin from './config/firebase-config.js';
 
 const app = express();
 app.use(express.json());
@@ -67,6 +68,7 @@ app.use(cors());
 
 const port = process.env.PORT || 3000;
 const cronInterval = '0 19 * * *';
+
 
 
 //-- Users --
@@ -208,17 +210,18 @@ app.get('/users/read-user/:uid', async (req, res) => {
 });
 
 //-- Services --
-
+// authenticateFirebaseToken
 // Create new service
 app.post(
-  '/services/create-service',
+  '/services/create-service', 
+  authenticateFirebaseToken,
   [
     check('name').notEmpty().withMessage('Service name cannot be empty'),
     check('owner_id').notEmpty().withMessage('Owner id cannot be empty'),
   ],
   async (req, res) => {
     try {
-      const { name, description, duration, price, owner_id, img_url,token } =
+      const { name, description, duration, price, owner_id, img_url } =
         req.body;
         
       // Validate the request data
@@ -1120,30 +1123,6 @@ app.get('/business/get-business/:owner_id', async (req, res) => {
   }
 });
 
-// // send message for client booking new appointment.
-// app.get('/send-message', async (req, res) => {
-//   try {
-//     // Validate the request data
-//     const message = formulateNewSummaryClientMsg(
-//       'מיכל',
-//       'קארן רונן',
-//       '13/10/24',
-//       '15:00',
-//       '90',
-//       'רבניצקי 4 תל אביב'
-//     );
-//     const result = await sendWhatsappMessage(message);
-
-//     // if (result.length > 0) {
-//     //   res.status(201).json(result[0]);
-//     // } else {
-//     //   res.status(500).send('Cannot fetch business');
-//     // }
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Server error');
-//   }
-// });
 
 app.post(
   '/send-message/client-new-appointment',
@@ -1214,26 +1193,29 @@ cron.schedule(
   }
 );
 
-//------------------------------------------
-// middleware:
-// async function authenticateFirebaseToken(req, res, next) {
-//   // get token
-//   const authHeader = req.headers['authorization'];
 
-//   const token = authHeader && authHeader.split(' ')[1];
 
-//   if (token === null) return res.sendStatus(401);
+//-middleware: -----------------------------------------
 
-//   // we have valid token, verify that token:
-//   try {
-//     const decodeValue = await admin.auth().verifyIdToken(token);
+async function authenticateFirebaseToken(req, res, next) {
+  // get token
+  const authHeader = req.headers['authorization'];
+  
+  const token = authHeader && authHeader.split(' ')[1];
+  
 
-//     if (decodeValue) return next();
-//     return res.json({ message: 'unauthorized' });
-//   } catch (e) {
-//     return res.json({ message: 'internal error' });
-//   }
-// }
+  if (token === null) return res.sendStatus(401);
+
+  // we have valid token, verify that token:
+  try {
+    const decodeValue = await admin.auth().verifyIdToken(token);
+
+    if (decodeValue) return next();
+    return res.json({ message: 'unauthorized' });
+  } catch (e) {
+    return res.json({ message: 'internal error' });
+  }
+}
 //------------------------------------------
 app.use((err, req, res, next) => {
   console.error(err.stack);
